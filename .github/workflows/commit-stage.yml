@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pmd-report
-          path: target/pmd-reports/pmd.html
+          path: catalog-service/target/pmd-reports/pmd.html
 
       - name: Code coverage check with JaCoCo
         run: |
