@@ -1,9 +1,9 @@
 package me.alex.polarbookshop.catalogservice;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootApplication
+@SpringBootTest(classes = CatalogServiceApplication.class)
 public class CatalogServiceApplicationTests {
     @Test
     void contextLoads() {
