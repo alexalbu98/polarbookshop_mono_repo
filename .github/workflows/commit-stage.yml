@@ -47,6 +47,12 @@ jobs:
           chmod +x mvnw
           ./mvnw pmd:check
 
+      - name: Upload PMD HTML report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pmd-report
+          path: target/pmd-reports/pmd.html
+
       - name: Code coverage check with JaCoCo
         run: |
           chmod +x mvnw
