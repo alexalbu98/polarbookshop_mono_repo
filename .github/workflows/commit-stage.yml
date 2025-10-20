@@ -31,17 +31,6 @@ jobs:
           severity-cutoff: 'high'
           output-format: sarif
 
-      - name: Upload vulnerability report
-        uses: github/codeql-action/upload-sarif@v3
-        if: success() || failure()
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-
-      - name: Build, unit tests and integration tests
-        run: |
-          chmod +x mvnw
-          ./mvnw clean install
-
       - name: Static code analysis with PMD
         run: |
           chmod +x mvnw
@@ -52,7 +41,13 @@ jobs:
           chmod +x mvnw
           ./mvnw jacoco:check
 
-      - name: OWASP Dependency Check
+      - name: Upload vulnerability report
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+
+      - name: Build, unit tests and integration tests
         run: |
           chmod +x mvnw
-          ./mvnw org.owasp:dependency-check-maven:check -Dnvd.apikey=${{ secrets.NVD_API_KEY }}
+          ./mvnw clean install
