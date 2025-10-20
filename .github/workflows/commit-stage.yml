@@ -48,7 +48,7 @@ jobs:
           ./mvnw pmd:check
 
       - name: Upload PMD HTML report as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pmd-report
           path: target/pmd-reports/pmd.html
