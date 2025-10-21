@@ -7,6 +7,8 @@ server:
       max: 50
       min-spare: 10
 
+welcome:
+  message: "Welcome message"
 
 spring:
   application:
@@ -18,7 +20,7 @@ spring:
       uri: http://localhost:8888
       request-connect-timeout: 5000
       request-read-timeout: 5000
-      fail-fast: true
+      fail-fast: false # true for prod
       retry:
         max-attempts: 6
         initial-interval: 1000
