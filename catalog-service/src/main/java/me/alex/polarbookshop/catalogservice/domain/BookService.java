@@ -1,12 +1,14 @@
 package me.alex.polarbookshop.catalogservice.domain;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     public Iterable<Book> viewBookList() {
         return bookRepository.findAll();
