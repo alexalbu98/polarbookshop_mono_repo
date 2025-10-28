@@ -79,6 +79,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <imageName>ghcr.io/alexalbu98/${project.artifactId}:${project.version}</imageName>
                 </configuration>
             </plugin>
             <plugin>
