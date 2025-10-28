@@ -11,8 +11,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  CATALOG_SERVICE_IMAGE: alexalbu98/catalog-service
-  CONFIG_SERVER_IMAGE: alexalbu98/config-server
   VERSION: latest
 
 jobs:
@@ -72,6 +70,9 @@ jobs:
       contents: read
       packages: write
       security-events: write
+    strategy:
+      matrix:
+        service: [ catalog-service, config-server ]
 
     steps:
       - name: Checkout source code
@@ -96,36 +97,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: OCI docker image vulnerability scanning catalog service
+      - name: OCI docker image vulnerability scanning
         uses: anchore/scan-action@v6
-        id: scan-catalog-service
+        id: scan
         with:
-          image: ${{ env.REGISTRY }}/${{ env.CATALOG_SERVICE_IMAGE }}:${{ env.VERSION }}
+          image: ${{ env.REGISTRY }}/${{ github.actor }}/${{ matrix.service }}:${{ env.VERSION }}
           fail-build: false
           severity-cutoff: high
 
-      - name: OCI docker image vulnerability scanning config server
-        uses: anchore/scan-action@v6
-        id: scan-config-server
-        with:
-          image: ${{ env.REGISTRY }}/${{ env.CONFIG_SERVER_IMAGE }}:${{ env.VERSION }}
-          fail-build: false
-          severity-cutoff: high
-
-      - name: Upload vulnerability report catalog service
+      - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          sarif_file: ${{ steps.scan-catalog-service.outputs.sarif }}
+          sarif_file: ${{ steps.scan.outputs.sarif }}
 
-      - name: Upload vulnerability report config server
-        uses: github/codeql-action/upload-sarif@v4
-        if: success() || failure()
-        with:
-          sarif_file: ${{ steps.scan-config-server.outputs.sarif }}
-
-      - name: Publish Catalog Service
-        run: docker push {{ env.REGISTRY }}/${{ env.CATALOG_SERVICE_IMAGE }}:${{ env.VERSION }}
-
-      - name: Publish Config Server
-        run: docker push {{ env.REGISTRY }}/${{ env.CONFIG_SERVER_IMAGE }}:${{ env.VERSION }}
+      - name: Publish to container registry
+        run: docker push ${{ env.REGISTRY }}/${{ github.actor }}/${{ matrix.service }}:${{ env.VERSION }}
