@@ -89,6 +89,13 @@ jobs:
           chmod +x mvnw
           ./mvnw spring-boot:build-image
 
+      - name: Log into container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACCESS_TOKEN }}
+
       - name: OCI docker image vulnerability scanning catalog service
         uses: anchore/scan-action@v6
         id: scan-catalog-service
@@ -116,13 +123,6 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: ${{ steps.scan-config-server.outputs.sarif }}
-
-      - name: Log into container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Publish Catalog Service
         run: docker push {{ env.REGISTRY }}/${{ env.CATALOG_SERVICE_IMAGE }}:${{ env.VERSION }}
