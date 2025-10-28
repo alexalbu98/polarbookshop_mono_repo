@@ -8,11 +8,11 @@ on:
     branches:
       - develop
       - main
+
 env:
   REGISTRY: ghcr.io
-  GITHUB_USERNAME: alexalbu98
-  CATALOG_SERVICE_IMAGE: ${{ env.GITHUB_USERNAME }}/catalog-service
-  CONFIG_SERVER_IMAGE: ${{ env.GITHUB_USERNAME }}/config-server
+  CATALOG_SERVICE_IMAGE: alexalbu98/catalog-service
+  CONFIG_SERVER_IMAGE: alexalbu98/config-server
   VERSION: latest
 
 jobs:
