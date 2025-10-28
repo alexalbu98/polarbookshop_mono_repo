@@ -72,43 +72,52 @@ jobs:
       contents: read
       packages: write
       security-events: write
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 21
           cache: maven
+
       - name: Build container image
         run: |
           chmod +x mvnw
           ./mvnw spring-boot:build-image
+
       - name: OCI Catalog Service vulnerability scanning
         uses: anchore/scan-action@v3
         with:
           image: ${{ env.REGISTRY }}/${{ env.CATALOG_SERVICE_IMAGE }}:${{ env.VERSION }}
           fail-build: false
           severity-cutoff: high
+
       - name: OCI Config Server vulnerability scanning
         uses: anchore/scan-action@v3
         with:
           image: ${{ env.REGISTRY }}/${{ env.CONFIG_SERVER_IMAGE }}:${{ env.VERSION }}
           fail-build: false
           severity-cutoff: high
+
       - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
+
       - name: Log into container registry
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ACCESS_TOKEN }}
+
       - name: Publish Catalog Service
         run: docker push {{ env.REGISTRY }}/${{ env.CATALOG_SERVICE_IMAGE }}:${{ env.VERSION }}
+
       - name: Publish Config Server
         run: docker push {{ env.REGISTRY }}/${{ env.CONFIG_SERVER_IMAGE }}:${{ env.VERSION }}
