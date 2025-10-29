@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: order-service
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+
+server:
+  shutdown: graceful
+  port: 9002
+  netty:
+    connection-timeout: 2s
+    idle-timeout: 15s
