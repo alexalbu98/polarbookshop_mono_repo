@@ -9,7 +9,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public interface PostgresIT {
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16")
+    PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16")
             .withDatabaseName("polardb")
             .withUsername("user")
             .withPassword("password");
