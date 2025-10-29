@@ -3,23 +3,13 @@ custom_build(
     # Name of the container image
     ref = 'catalog-service',
 
+    skips_local_docker = True,
+
     # Command to build the container image
     command = './mvnw spring-boot:build-image',
 
     # Files to watch that trigger a new build
     deps = ['pom.xml', 'catalog-service', 'deployment/K8s']
-)
-
-# Config Server
-custom_build(
-    # Name of the container image
-    ref = 'config-server',
-
-    # Command to build the container image
-    command = './mvnw spring-boot:build-image',
-
-    # Files to watch that trigger a new build
-    deps = ['pom.xml', 'config-server', 'deployment/K8s']
 )
 
 # Deploy
