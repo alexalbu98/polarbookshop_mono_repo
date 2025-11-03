@@ -23,6 +23,18 @@ spring:
               max-life-time: 60s
             response-timeout: 5s
             connect-timeout: 5000
+          default-filters:
+            - name: Retry
+              args:
+                retries: 3
+                methods: GET
+                statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, GATEWAY_TIMEOUT
+                exceptions: java.io.IOException, java.util.concurrent.TimeoutException, java.net.ConnectException
+                backoff:
+                  firstBackoff: 100ms
+                  maxBackoff: 2s
+                  factor: 2
+                  basedOnPreviousValue: true
 
 server:
   port: 9000
@@ -30,3 +42,7 @@ server:
     connection-timeout: 2s
     idle-timeout: 15s
   shutdown: graceful
+
+logging:
+  level:
+    root: debug
