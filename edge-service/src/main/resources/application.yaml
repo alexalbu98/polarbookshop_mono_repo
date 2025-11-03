@@ -50,6 +50,7 @@ spring:
                   replenishRate: 10
                   burstCapacity: 20
                   requestedTokens: 1
+            - SaveSession
   data:
     redis:
       connect-timeout: 2s
@@ -57,6 +58,10 @@ spring:
       port: 6379
       lettuce:
         shutdown-timeout: 1s
+  session:
+    redis:
+      namespace: polar:edge
+    timeout: 10m
 
 server:
   port: 9000
