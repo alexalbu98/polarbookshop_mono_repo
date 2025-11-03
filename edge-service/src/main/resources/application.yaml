@@ -44,6 +44,19 @@ spring:
                   maxBackoff: 2s
                   factor: 2
                   basedOnPreviousValue: true
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter:
+                  replenishRate: 10
+                  burstCapacity: 20
+                  requestedTokens: 1
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      lettuce:
+        shutdown-timeout: 1s
 
 server:
   port: 9000
