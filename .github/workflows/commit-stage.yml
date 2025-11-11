@@ -12,6 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   VERSION: latest
+  NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
 jobs:
   build:
@@ -20,8 +21,6 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    env:
-      NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -74,7 +73,7 @@ jobs:
       security-events: write
     strategy:
       matrix:
-        service: [ catalog-service, config-server ]
+        service: [ catalog-service, config-server, order-service, edge-service, dispatch-service ]
 
     steps:
       - name: Checkout source code
