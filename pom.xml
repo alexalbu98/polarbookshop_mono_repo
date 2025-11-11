@@ -126,7 +126,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.27.0</version>
+                <version>3.28.0</version>
                 <executions>
                     <execution>
                         <id>pmd</id>
@@ -148,6 +148,7 @@
                         <ruleset>category/java/performance.xml</ruleset>
                         <ruleset>category/java/security.xml</ruleset>
                         <ruleset>category/java/design.xml</ruleset>
+                        <ruleset>category/java/multithreading.xml</ruleset>
                     </rulesets>
                     <outputDirectory>${project.build.directory}/pmd-reports</outputDirectory>
                 </configuration>
