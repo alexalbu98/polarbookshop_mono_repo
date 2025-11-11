@@ -1,6 +1,27 @@
 spring:
   application:
     name: order-service
+  cloud:
+    function:
+      definition: dispatchOrder
+    stream:
+      bindings:
+        dispatchOrder-in-0:
+          destination: order-dispatched
+          group: ${spring.application.name}
+        acceptedOrder-out-0:
+          destination: order-accepted
+      rabbit:
+        bindings:
+          acceptedOrder-out-0:
+            producer:
+              transacted: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
+    connection-timeout: 5s
   lifecycle:
     timeout-per-shutdown-phase: 15s
   r2dbc:
