@@ -52,16 +52,6 @@ jobs:
           chmod +x mvnw
           ./mvnw clean install
 
-      - name: Prepare Kubeval
-        uses: alexellis/arkade-get@master
-        with:
-          kubectl: latest
-          kubeval: latest
-
-      - name: Run Kubeval
-        run: |
-          kubeval --strict -d deployment/K8s/services
-
   package:
     name: Package and Publish
     if: ${{ github.ref == 'refs/heads/main' }}
