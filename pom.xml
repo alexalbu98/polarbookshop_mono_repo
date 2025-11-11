@@ -105,6 +105,7 @@
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -131,9 +132,7 @@
                         <id>pmd</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>
-                                check
-                            </goal>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -148,6 +147,7 @@
                         <ruleset>category/java/errorprone.xml</ruleset>
                         <ruleset>category/java/performance.xml</ruleset>
                         <ruleset>category/java/security.xml</ruleset>
+                        <ruleset>category/java/design.xml</ruleset>
                     </rulesets>
                     <outputDirectory>${project.build.directory}/pmd-reports</outputDirectory>
                 </configuration>
@@ -210,6 +210,24 @@
                             </limits>
                         </rule>
                     </rules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>12.1.8</version>
+                <executions>
+                    <execution>
+                        <id>owasp</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
                 </configuration>
             </plugin>
         </plugins>
