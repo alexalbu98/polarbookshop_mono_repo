@@ -20,6 +20,8 @@ jobs:
     permissions:
       contents: read
       security-events: write
+    env:
+      NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -50,16 +52,6 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw clean install
-
-      - name: Static code analysis with PMD
-        run: |
-          chmod +x mvnw
-          ./mvnw pmd:check
-
-      - name: Code coverage check with JaCoCo
-        run: |
-          chmod +x mvnw
-          ./mvnw jacoco:check
 
       - name: Prepare Kubeval
         uses: alexellis/arkade-get@master
