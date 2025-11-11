@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 @Slf4j
 @Component
+@SuppressWarnings("PMD.GuardLogStatement")
 public class DispatchingFunctions {
 
     @Bean
