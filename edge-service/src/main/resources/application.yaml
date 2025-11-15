@@ -62,6 +62,7 @@ spring:
                   burstCapacity: 20
                   requestedTokens: 1
             - SaveSession
+            - TokenRelay
   data:
     redis:
       connect-timeout: 2s
