@@ -9,7 +9,7 @@ public interface KeycloakIT {
 
     @Container
     KeycloakContainer keycloakContainer =
-            new KeycloakContainer("quay.io/keycloak/keycloak:19.0")
+            new KeycloakContainer("quay.io/keycloak/keycloak:25.0")
                     .withRealmImportFile("test-realm-config.json");
 
     @DynamicPropertySource

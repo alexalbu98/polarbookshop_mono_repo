@@ -19,7 +19,7 @@ public class WebSecurityConfig {
         return http
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/books/").permitAll()
                                 .anyRequest().hasRole("employee"))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(sessionManagement ->
