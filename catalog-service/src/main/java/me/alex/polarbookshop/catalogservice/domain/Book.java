@@ -3,8 +3,10 @@ package me.alex.polarbookshop.catalogservice.domain;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 
@@ -36,6 +38,11 @@ public record Book(
         @LastModifiedDate
         Instant lastModifiedDate,
 
+        @CreatedBy
+        String createdBy,
+        @LastModifiedBy
+        String lastModifiedBy,
+
         @Version
         int version
 ) {
@@ -43,7 +50,7 @@ public record Book(
             String isbn, String title, String author, Double price, String publisher
     ) {
         return new Book(
-                null, isbn, title, author, price, publisher, null, null, 0
+                null, isbn, title, author, price, publisher, null, null, null, null, 0
         );
     }
 }
