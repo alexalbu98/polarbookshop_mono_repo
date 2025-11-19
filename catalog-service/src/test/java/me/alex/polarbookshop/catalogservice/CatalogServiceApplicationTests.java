@@ -4,15 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.alex.polarbookshop.catalogservice.domain.Book;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -24,9 +21,7 @@ public class CatalogServiceApplicationTests implements PostgresIT, KeycloakIT {
     private static KeycloakToken isabelleTokens;
 
     @Autowired
-    WebApplicationContext applicationContext;
-
-    WebTestClient webTestClient;
+    private WebTestClient webTestClient;
 
     @BeforeAll
     static void generateAccessTokens() {
@@ -39,11 +34,6 @@ public class CatalogServiceApplicationTests implements PostgresIT, KeycloakIT {
                 "isabelle", "password", webClient);
         bjornTokens = authenticateWith(
                 "bjorn", "password", webClient);
-    }
-
-    @BeforeEach
-    void setup() {
-        webTestClient = MockMvcWebTestClient.bindToApplicationContext(applicationContext).build();
     }
 
     private static KeycloakToken authenticateWith(
