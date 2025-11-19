@@ -11,9 +11,6 @@
 
     <artifactId>catalog-service</artifactId>
 
-    <properties>
-        <testcontainers-keycloak.version>3.4.0</testcontainers-keycloak.version>
-    </properties>
 
     <dependencies>
         <dependency>
