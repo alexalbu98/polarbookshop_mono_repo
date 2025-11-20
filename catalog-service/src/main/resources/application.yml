@@ -43,6 +43,9 @@ spring:
       maximum-pool-size: 5
 
 management:
+  tracing:
+    sampling:
+      probability: '1.0'
   endpoints:
     web:
       exposure:
@@ -58,5 +61,5 @@ management:
       application: ${spring.application.name}
   otlp:
     tracing:
-      endpoint: http://localhost:4317
+      endpoint: http://tempo:4317
       transport: grpc
