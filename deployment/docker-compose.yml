@@ -9,15 +9,41 @@ services:
       - BPL_JVM_THREAD_COUNT=50
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8001
+  edge-service:
+    depends_on:
+      - fluent-bit
+      - polar-keycloak
+      - polar-redis
+    image: "edge-service:1.0.0"
+    container_name: "edge-service"
+    ports:
+      - "9000:9000"
+      - "8001:8000"
+    environment:
+      # Buildpacks environment variable to enable debug through a socket on port 8000
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8000
+      - CATALOG_SERVICE_URL=http://catalog-service:9001
+      - ORDER_SERVICE_URL=http://order-service:9002
+      - SPA_URL=http://polar-ui:9004
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_REDIS_HOST=polar-redis
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/PolarBookshop
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
   catalog-service:
     depends_on:
+      - fluent-bit
       - polar-catalog-service-postgres
+      - polar-keycloak
       - config-server
     image: "catalog-service:1.0.0"
     container_name: "catalog-service"
     ports:
       - "9001:9001"
-      - "8001:8001"
+      - "8002:8001"
     environment:
       - BPL_JVM_THREAD_COUNT=50
       - BPL_DEBUG_ENABLED=true
@@ -25,6 +51,7 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
       - SPRING_DATASOURCE_URL=jdbc:postgresql://polar-catalog-service-postgres:5432/polardb_catalog
       - SPRING_PROFILES_ACTIVE=testdata
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/PolarBookshop
     logging:
       driver: fluentd
       options:
@@ -36,13 +63,14 @@ services:
     container_name: "order-service"
     ports:
       - "9002:9002"
-      - "8002:8001"
+      - "8003:8001"
     environment:
       - BPL_JVM_THREAD_COUNT=50
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8001
       - SPRING_R2DBC_URL=r2dbc:postgresql://polar-order-service-postgres:5432/polardb_order
       - SPRING_FLYWAY_URL=jdbc:postgresql://polar-order-service-postgres:5432/polardb_order
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/PolarBookshop
   polar-catalog-service-postgres:
     image: "postgres:16"
     container_name: "polar-catalog-service-postgres"
@@ -78,12 +106,16 @@ services:
   polar-keycloak:
     image: quay.io/keycloak/keycloak:25.0
     container_name: "polar-keycloak"
-    command: start-dev
+    command: start-dev --import-realm --http-enabled=true
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
     environment:
       - KEYCLOAK_ADMIN=user
       - KEYCLOAK_ADMIN_PASSWORD=password
     ports:
       - "8080:8080"
+
+  # Observability
 
   grafana:
     image: grafana/grafana:9.1.2
@@ -91,6 +123,7 @@ services:
     depends_on:
       - loki
       - prometheus
+      - tempo
     ports:
       - "3000:3000"
     environment:
@@ -123,3 +156,12 @@ services:
       - "9090:9090"
     volumes:
       - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  tempo:
+    image: grafana/tempo:2.5.0
+    container_name: tempo
+    command: -config.file=/etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4317:4317"
+    volumes:
+      - ./observability/tempo/tempo.yml:/etc/tempo-config.yml

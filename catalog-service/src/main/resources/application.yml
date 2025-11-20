@@ -56,3 +56,7 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+  otlp:
+    tracing:
+      endpoint: http://localhost:4317
+      transport: grpc
