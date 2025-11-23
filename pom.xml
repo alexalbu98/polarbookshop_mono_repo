@@ -27,6 +27,7 @@
         <module>order-service</module>
         <module>edge-service</module>
         <module>dispatch-service</module>
+        <module>quote-service</module>
     </modules>
 
     <dependencyManagement>
