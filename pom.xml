@@ -28,6 +28,7 @@
         <module>edge-service</module>
         <module>dispatch-service</module>
         <module>quote-service</module>
+        <module>quote-function</module>
     </modules>
 
     <dependencyManagement>
