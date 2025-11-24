@@ -4,12 +4,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 @Service
 public class QuoteService {
-    private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new SecureRandom();
     private static final List<Quote> QUOTES = List.of(
             new Quote("Content A", "Abigail", Genre.ADVENTURE),
             new Quote("Content B", "Beatrix", Genre.ADVENTURE),
