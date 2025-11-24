@@ -9,8 +9,8 @@ import java.util.Random;
 
 @Service
 public class QuoteService {
-    private static final Random random = new Random();
-    private static final List<Quote> quotes = List.of(
+    private static final Random RANDOM = new Random();
+    private static final List<Quote> QUOTES = List.of(
             new Quote("Content A", "Abigail", Genre.ADVENTURE),
             new Quote("Content B", "Beatrix", Genre.ADVENTURE),
             new Quote("Content C", "Casper", Genre.FANTASY),
@@ -20,18 +20,18 @@ public class QuoteService {
     );
 
     public Flux<Quote> getAllQuotes() {
-        return Flux.fromIterable(quotes);
+        return Flux.fromIterable(QUOTES);
     }
 
     public Mono<Quote> getRandomQuote() {
-        return Mono.just(quotes.get(random.nextInt(quotes.size() - 1)));
+        return Mono.just(QUOTES.get(RANDOM.nextInt(QUOTES.size() - 1)));
     }
 
     public Mono<Quote> getRandomQuoteByGenre(Genre genre) {
-        var quotesForGenre = quotes.stream()
+        var quotesForGenre = QUOTES.stream()
                 .filter(q -> q.genre().equals(genre))
                 .toList();
         return Mono.just(quotesForGenre.get(
-                random.nextInt(quotesForGenre.size() - 1)));
+                RANDOM.nextInt(quotesForGenre.size() - 1)));
     }
 }
